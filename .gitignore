@@ -1,0 +1,4 @@
+.DS_Store
+node_modules/
+# Claude Code writes its own type declarations here at every load.
+.claude-plugin/types/

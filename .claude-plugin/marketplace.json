@@ -1,0 +1,12 @@
+{
+  "name": "thinking-flow",
+  "owner": { "name": "Chanhee Lee" },
+  "description": "thinking-flow, a Claude Code mod that draws how Claude reached each answer.",
+  "plugins": [
+    {
+      "name": "thinking-flow",
+      "source": "./",
+      "description": "A simple flow of how Claude reached each answer, drawn in a side pane."
+    }
+  ]
+}
