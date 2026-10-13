@@ -274,33 +274,33 @@ const WHITE = '#FDFDFD'
 const INK = { title: WHITE, body: '#CDCED5', tools: '#9193A4', dark: BOX }
 const QUESTION = WHITE
 const ANSWER = '#E2D810'
-/** Stage kinds in the order the color key lists them: outline color, dashed or solid, and key label. */
+/** Stage kinds in the order the color key lists them: outline color, dashed or solid, and label. */
 export const KINDS: readonly Kind[] = ['think', 'look', 'change', 'run', 'delegate']
 // Four outline colors stay distinct, also for color-blind readers; subagents share white, dashed.
-export const KIND: Record<Kind, { color: string; dashed: boolean; key: string }> = {
-  think: { color: WHITE, dashed: false, key: 'Thought or wrote to you' },
-  look: { color: '#12A4D9', dashed: false, key: 'Looked at files or the web' },
-  change: { color: '#E52165', dashed: false, key: 'Made changes' },
-  run: { color: '#CCA800', dashed: false, key: 'Ran commands or tools' },
-  delegate: { color: WHITE, dashed: true, key: 'Handed work to subagents' },
+export const KIND: Record<Kind, { color: string; dashed: boolean; label: string }> = {
+  think: { color: WHITE, dashed: false, label: 'Thought or wrote to you' },
+  look: { color: '#12A4D9', dashed: false, label: 'Looked at files or the web' },
+  change: { color: '#E52165', dashed: false, label: 'Made changes' },
+  run: { color: '#CCA800', dashed: false, label: 'Ran commands or tools' },
+  delegate: { color: WHITE, dashed: true, label: 'Handed work to subagents' },
 }
-// The color key: a card above the flow, two entries per row.
-const KEY = { size: 11, row: 17, col: 184 }
+// The legend, titled "Color key": a card above the flow, two entries per row.
+const LEGEND = { size: 11, row: 17, col: 184 }
 
 /** The color key card for the kinds a flow uses, drawn at y; returns its markup and height. */
-function keyCard(kinds: Kind[], y: number): { svg: string; h: number } {
+function legendCard(kinds: Kind[], y: number): { svg: string; h: number } {
   if (kinds.length === 0) return { svg: '', h: 0 }
   const left = BOX_X + 12
-  const h = 25 + Math.ceil(kinds.length / 2) * KEY.row
+  const h = 25 + Math.ceil(kinds.length / 2) * LEGEND.row
   const entries = kinds.map((k, i) => {
-    const x = left + (i % 2) * KEY.col
-    const ry = y + 17 + KEY.row * (Math.floor(i / 2) + 1)
+    const x = left + (i % 2) * LEGEND.col
+    const ry = y + 17 + LEGEND.row * (Math.floor(i / 2) + 1)
     const dash = KIND[k].dashed ? ' stroke-dasharray="3 2"' : ''
     return `<rect x="${x}" y="${ry - 9}" width="16" height="11" rx="3" fill="${BOX}" stroke="${KIND[k].color}" stroke-width="2"${dash} />` +
-      `<text x="${x + 22}" y="${ry}" font-size="${KEY.size}" fill="${INK.body}">${escapeXml(KIND[k].key)}</text>`
+      `<text x="${x + 22}" y="${ry}" font-size="${LEGEND.size}" fill="${INK.body}">${escapeXml(KIND[k].label)}</text>`
   })
   const svg = `<g><rect x="${BOX_X}" y="${y}" width="${BOX_W}" height="${h}" rx="8" fill="${BOX}" stroke="${INK.tools}" stroke-opacity="0.5" stroke-width="1" />` +
-    `<text x="${left}" y="${y + 17}" font-size="${KEY.size}" font-weight="600" fill="${INK.tools}">Color key</text>${entries.join('')}</g>`
+    `<text x="${left}" y="${y + 17}" font-size="${LEGEND.size}" font-weight="600" fill="${INK.tools}">Color key</text>${entries.join('')}</g>`
   return { svg, h }
 }
 
@@ -353,7 +353,7 @@ export function svgFlow(turn: Turn, flow: Flow): { source: string; alt: string; 
   for (const stage of flow.stages) {
     const kind = kindOf(turn, stage)
     used.add(kind)
-    said.push(`${stage.label} (${KIND[kind].key.toLowerCase()})`)
+    said.push(`${stage.label} (${KIND[kind].label.toLowerCase()})`)
     const steps = turn.steps.filter(s => stage.steps.includes(s.n))
     const acts = steps.flatMap(s => s.actions.map(describeAction))
     const subs = steps.reduce((a, s) => a + s.subSteps, 0)
@@ -383,10 +383,10 @@ export function svgFlow(turn: Turn, flow: Flow): { source: string; alt: string; 
   const cx = BOX_X + BOX_W / 2
   const left = BOX_X + 12
   let y = PAD
-  const key = keyCard(KINDS.filter(k => used.has(k)), y)
-  if (key.h > 0) {
-    parts.push(key.svg)
-    y += key.h + 14
+  const legend = legendCard(KINDS.filter(k => used.has(k)), y)
+  if (legend.h > 0) {
+    parts.push(legend.svg)
+    y += legend.h + 14
   }
   boxes.forEach((b, i) => {
     const titleLines = wrap(b.title, TITLE.chars, TITLE.lines)

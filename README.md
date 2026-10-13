@@ -58,7 +58,7 @@ When an answer ends, the mod makes one request to Haiku through Claude Code's ow
 
 A record keeps at most 40 steps: the first 20 and the last 20. On three answers rebuilt from a real session, with 2 to 12 steps, the request was 1,369 to 3,461 characters (about 340 to 870 tokens) and the replies were 500 to 929 characters. The reply is capped at 800 tokens. The request counts toward your usage like any other Claude Code request.
 
-Nothing else leaves the session. The mod writes no files and makes no other network calls. The record lives in the session's memory and ends with it.
+Nothing else leaves the session. The mod writes no files and makes no other network calls. The record lives in the session's memory and ends with it. The only web address in the code is `http://www.w3.org/2000/svg`, the standard name every SVG drawing carries, and nothing ever fetches it.
 
 To make no model calls at all, set **Step wording** to `rules`, either on the install screen or later in `/config`. Steps then get fixed labels such as "Looked at 3 sources".
 
@@ -79,6 +79,8 @@ The small model sees only what the session showed: thinking summaries, tool call
 claude plugin validate . --strict
 claude plugin test .
 ```
+
+The `types` field in `plugin.json` names the mod's state contract, `types/index.d.ts`. Claude Code's validator requires it for a mod that keeps state, so the field stays even though some checkers list it as unknown.
 
 To run the mod from a folder, start Claude Code with `claude --plugin-dir <folder>`. Claude Code writes its type declarations into `.claude-plugin/types/` whenever it loads the folder, and after that a TypeScript compiler run, `tsc -p .`, type checks the mod.
 

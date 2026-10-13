@@ -92,10 +92,10 @@ describe('kinds of work', () => {
   test('the color key lists only the kinds the flow uses, in a fixed order', async () => {
     const { source, alt } = svgFlow(turn, rulesFlow(turn))
     expect(source.includes('Color key')).toBe(true)
-    const at = [KIND.think.key, KIND.look.key, KIND.change.key, KIND.run.key].map(k => source.indexOf(k))
+    const at = [KIND.think.label, KIND.look.label, KIND.change.label, KIND.run.label].map(k => source.indexOf(k))
     expect(at.every(i => i > 0)).toBe(true)
     expect([...at].sort((a, b) => a - b)).toEqual(at)
-    expect(source.includes(KIND.delegate.key)).toBe(false)
+    expect(source.includes(KIND.delegate.label)).toBe(false)
     expect(alt.includes('Looked at 2 sources (looked at files or the web)')).toBe(true)
   })
 })
