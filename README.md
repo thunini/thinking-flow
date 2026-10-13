@@ -58,11 +58,25 @@ When an answer ends, the mod makes one request to Haiku through Claude Code's ow
 
 A record keeps at most 40 steps: the first 20 and the last 20. On three answers rebuilt from a real session, with 2 to 12 steps, the request was 1,369 to 3,461 characters (about 340 to 870 tokens) and the replies were 500 to 929 characters. The reply is capped at 800 tokens. The request counts toward your usage like any other Claude Code request.
 
-Nothing else leaves the session. The mod writes no files and makes no other network calls. The record lives in the session's memory and ends with it. The only web address in the code is `http://www.w3.org/2000/svg`, the standard name every SVG drawing carries, and nothing ever fetches it.
+Nothing else leaves the session. The mod writes no files and makes no other network calls. It reads no environment variables, files or settings, and it starts no processes. `claude plugin validate` lists every call it makes. The record lives in the session's memory and ends with it. The only web address in the code is `http://www.w3.org/2000/svg`, the standard name every SVG drawing carries, and nothing ever fetches it.
 
 To make no model calls at all, set **Step wording** to `rules`, either on the install screen or later in `/config`. Steps then get fixed labels such as "Looked at 3 sources".
 
 The full policy is on the [Privacy](https://github.com/thunini/thinking-flow/blob/main/PRIVACY.md) page.
+
+## What it hooks
+
+The mod registers seven hooks. All of them watch and pass events on unchanged, except the one that answers `/thinking-flow` and the one that draws the panel.
+
+| Hook | What it does |
+| --- | --- |
+| `session.start` | Registers the `/thinking-flow` command and starts the timer that words finished answers |
+| `command.run` | Answers `/thinking-flow` only, by opening the panel |
+| `turn.start` | Starts a record for the new answer |
+| `turn.step` | Notes each model request's thinking summary, tool calls and text, and passes every part on unchanged |
+| `tool.call` | Notes whether each tool call succeeded, failed or was refused, and passes the call on unchanged |
+| `turn.complete` | Marks the answer as finished, so the timer can word it |
+| `ui.render` | Draws the panel |
 
 ## How the wording stays close to the record
 

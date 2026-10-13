@@ -52,6 +52,14 @@ describe('laneOf', () => {
     expect(laneOf('Bash', { command: 'npm install' })).toBe('run')
     expect(laneOf('Edit', { file_path: '/a' })).toBe('change')
   })
+  test('connector verbs and shell commands are matched from word lists', async () => {
+    expect(laneOf('mcp__slack__set_status', {})).toBe('change')
+    expect(laneOf('mcp__drive__get_file', {})).toBe('look')
+    expect(laneOf('mcp__drive__run_report', {})).toBe('run')
+    expect(laneOf('Bash', { command: 'cd repo && git   log -3' })).toBe('look')
+    expect(laneOf('Bash', { command: 'curl -s https://example.com' })).toBe('look')
+    expect(laneOf('Bash', { command: 'git push' })).toBe('run')
+  })
 })
 
 describe('tool summary', () => {

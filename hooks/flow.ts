@@ -14,14 +14,32 @@ const CHANGE = new Set(['Edit', 'Write', 'MultiEdit', 'NotebookEdit'])
 const PLAN = new Set(['TodoWrite', 'TodoRead', 'TaskCreate', 'TaskUpdate', 'TaskList', 'TaskGet'])
 const DELEGATE = new Set(['Agent', 'Task', 'Workflow', 'SendMessage'])
 const TALK = new Set(['AskUserQuestion', 'SendUserFile', 'Artifact', 'ExitPlanMode', 'PushNotification'])
-const READONLY_SHELL =
-  /^\s*(cd\s+\S+\s*(&&|;)\s*)?(ls|cat|head|tail|wc|grep|rg|find|sed\s+-n|awk|git\s+(log|diff|status|show|blame|grep|ls-files|rev-parse|fetch)|pwd|echo|which|command\s+-v|stat|file|du|tree|jq|shasum|date|curl\s+-s)\b/
-const MCP_LOOK = /^(get|list|read|search|find|query|fetch|describe|view|lookup|status|download)/i
+// Word lists that sort tool calls by the command text or tool name they start with. They are
+// only matched against text; the mod never runs any of them.
+const READONLY_COMMANDS = [
+  'ls', 'cat', 'head', 'tail', 'wc', 'grep', 'rg', 'find', 'sed -n', 'awk',
+  'git log', 'git diff', 'git status', 'git show', 'git blame', 'git grep', 'git ls-files', 'git rev-parse', 'git fetch',
+  'pwd', 'echo', 'which', 'command -v', 'stat', 'file', 'du', 'tree', 'jq', 'shasum', 'date', 'curl -s',
+]
+const MCP_LOOK_VERBS = ['get', 'list', 'read', 'search', 'find', 'query', 'fetch', 'describe', 'view', 'lookup', 'status', 'download']
+const MCP_CHANGE_VERBS = [
+  'create', 'update', 'delete', 'send', 'post', 'set', 'write', 'edit',
+  'upload', 'add', 'remove', 'apply', 'label', 'move', 'share', 'trash',
+]
+
+/** A regex alternation of a word list; a space inside an entry matches any run of spaces. */
+function anyOf(words: readonly string[]): string {
+  return words.map(w => w.split(' ').join('\\s+')).join('|')
+}
+
+// A shell call counts as looking when it starts with a read-only command, after an optional `cd <dir> &&`.
+const READONLY_SHELL = new RegExp(`^\\s*(cd\\s+\\S+\\s*(&&|;)\\s*)?(${anyOf(READONLY_COMMANDS)})\\b`)
+const MCP_LOOK = new RegExp(`^(${anyOf(MCP_LOOK_VERBS)})`, 'i')
+const MCP_CHANGE = new RegExp(`^(${anyOf(MCP_CHANGE_VERBS)})`, 'i')
 // The in-app browser and Claude in Chrome: reading and moving around a page is looking.
 const BROWSER = /^mcp__(Claude_Browser|claude-in-chrome|remote-devices__Claude_Browser)__/
 const BROWSER_CHANGE = /^(form_input|file_upload)$/i
 const BROWSER_RUN = /^(javascript_tool|javascript_exec|preview_stop)$/i
-const MCP_CHANGE = /^(create|update|delete|send|post|set|write|edit|upload|add|remove|apply|label|move|share|trash)/i
 
 function field(input: unknown, key: string): string {
   if (input && typeof input === 'object' && key in input) {
