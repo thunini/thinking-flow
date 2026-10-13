@@ -62,6 +62,8 @@ Nothing else leaves the session. The mod writes no files and makes no other netw
 
 To make no model calls at all, set **Step wording** to `rules`, either on the install screen or later in `/config`. Steps then get fixed labels such as "Looked at 3 sources".
 
+The full policy is on the [Privacy](https://github.com/thunini/thinking-flow/blob/main/PRIVACY.md) page.
+
 ## How the wording stays close to the record
 
 The small model sees only what the session showed: thinking summaries, tool calls and the answer. Its reply is used only when its steps cover every step of the record exactly once and in order. Otherwise fixed rules group the steps, and the panel says why. The wording is still a summary written by a model, so **Show actions** is there to check it.
