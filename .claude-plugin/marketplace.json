@@ -6,7 +6,7 @@
     {
       "name": "thinking-flow",
       "source": "./",
-      "description": "A simple flow of how Claude reached each answer, drawn in a side pane."
+      "description": "A simple flow of how Claude reached each answer, drawn in a side panel."
     }
   ]
 }

@@ -1,14 +1,14 @@
 # thinking-flow
 
-A Claude Code mod that draws how Claude reached each answer. A pane beside the conversation shows your question, a few steps in plain words, and the answer.
+A Claude Code mod that draws how Claude reached each answer. A panel beside the conversation shows your question, a few steps in plain words, and the answer.
 
 ![An example flow with all five kinds of step](docs/example-flow.png)
 
 *An example. The question and the steps are made up for this picture.*
 
-## What the pane shows
+## What the panel shows
 
-Type `/thinking-flow` to open the pane. Every answer Claude finishes after that gets a flow, and the buttons under it move between answers.
+Type `/thinking-flow` to open the panel. Every answer Claude finishes after that gets a flow, and the buttons under it move between answers.
 
 A small model (Haiku) reads what the session showed during the answer and groups the work into two to six steps. Each step gets a short label and one line on what it found. The line at the bottom left of a box lists the tools that step used. **Show actions** lists the tool calls and thinking summaries behind every step, so you can check the wording against what happened.
 
@@ -24,7 +24,7 @@ The outline color says what kind of work a step did:
 
 When a step did several kinds of work, the strongest one sets the color, in this order: changes, commands, subagents, looking, then writing or thinking. A pink outline therefore always means something changed. Tool calls you refused do not count, and updates to Claude's to-do list count as thinking. The question sits in a white card and the answer in a yellow one.
 
-In a terminal session the pane shows the same flow as numbered lines.
+In a terminal session the panel shows the same flow as numbered lines.
 
 ## Install
 
@@ -64,14 +64,14 @@ To make no model calls at all, set **Step wording** to `rules`, either on the in
 
 ## How the wording stays close to the record
 
-The small model sees only what the session showed: thinking summaries, tool calls and the answer. Its reply is used only when its steps cover every step of the record exactly once and in order. Otherwise fixed rules group the steps, and the pane says why. The wording is still a summary written by a model, so **Show actions** is there to check it.
+The small model sees only what the session showed: thinking summaries, tool calls and the answer. Its reply is used only when its steps cover every step of the record exactly once and in order. Otherwise fixed rules group the steps, and the panel says why. The wording is still a summary written by a model, so **Show actions** is there to check it.
 
 ## Limits
 
 - The figure is a picture. Use **Show actions** for the details behind a step.
 - A flow appears a few seconds after its answer ends.
 - Steps that subagents take are counted on the step that started them.
-- A new session starts with an empty pane.
+- A new session starts with an empty panel.
 
 ## Develop
 

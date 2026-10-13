@@ -1,7 +1,7 @@
 {
   "name": "thinking-flow",
   "displayName": "Thinking Flow",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A simple flow of how Claude reached each answer: the question, a few plain-word steps worded by a small model from what was visible, and the answer. Open it with /thinking-flow.",
   "types": "./types/index.d.ts",
   "author": {
@@ -10,7 +10,7 @@
   "homepage": "https://github.com/thunini/thinking-flow",
   "repository": "https://github.com/thunini/thinking-flow",
   "license": "MIT",
-  "keywords": ["visualization", "thinking", "flow", "pane", "mod"],
+  "keywords": ["visualization", "thinking", "flow", "panel", "mod"],
   "userConfig": {
     "wording": {
       "type": "string",
